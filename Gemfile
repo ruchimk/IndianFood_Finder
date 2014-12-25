@@ -34,6 +34,7 @@ end
 
 gem 'yelp'
 gem 'simple_oauth', '~> 0.2'
+gem 'figaro'
 
 
 # Use ActiveModel has_secure_password
