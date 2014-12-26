@@ -3,6 +3,7 @@ var resultsArray = [];
 //https://gist.github.com/bndkn/b421ba760bcb3960b545
 var appleMapsStyle = [{"featureType":"water","elementType":"geometry","stylers":[{"color":"#a2daf2"}]},{"featureType":"landscape.man_made","elementType":"geometry","stylers":[{"color":"#f7f1df"}]},{"featureType":"landscape.natural","elementType":"geometry","stylers":[{"color":"#d0e3b4"}]},{"featureType":"landscape.natural.terrain","elementType":"geometry","stylers":[{"visibility":"off"}]},{"featureType":"poi.park","elementType":"geometry","stylers":[{"color":"#bde6ab"}]},{"featureType":"poi","elementType":"labels","stylers":[{"visibility":"off"}]},{"featureType":"poi.medical","elementType":"geometry","stylers":[{"color":"#fbd3da"}]},{"featureType":"poi.business","stylers":[{"visibility":"off"}]},{"featureType":"road","elementType":"geometry.stroke","stylers":[{"visibility":"off"}]},{"featureType":"road","elementType":"labels","stylers":[{"visibility":"off"}]},{"featureType":"road.highway","elementType":"geometry.fill","stylers":[{"color":"#ffe15f"}]},{"featureType":"road.highway","elementType":"geometry.stroke","stylers":[{"color":"#efd151"}]},{"featureType":"road.arterial","elementType":"geometry.fill","stylers":[{"color":"#ffffff"}]},{"featureType":"road.local","elementType":"geometry.fill","stylers":[{"color":"black"}]},{"featureType":"transit.station.airport","elementType":"geometry.fill","stylers":[{"color":"#cfb2db"}]}];
 var map;
+var searchContainer = $("#search-container")[0];
 
 
 $(document).ready(function() {
@@ -12,10 +13,10 @@ $(document).ready(function() {
   });
 });
 
-var initialize = function() {
+var initialize = function(startingLat, startingLng) {
   var mapOptions = {
     center: new google.maps.LatLng(37.7577,-122.4376),
-    zoom: 14,
+    zoom: 13,
 
     mapTypeId: google.maps.MapTypeId.ROADMAP,
     styles: appleMapsStyle,
@@ -35,25 +36,26 @@ var initialize = function() {
   // Create a new Google map with the options above.
   map = new google.maps.Map($("#map-canvas")[0], mapOptions);
 
-  bindControls(map);
+  bindControls();
 
    // Populate results and map with indian restaurants around SF.
-  $.post("/search", {lat: 37.7577, lng: -122.4376}, function(data) {
+  $.post("/search", { lat: startingLat, lng: startingLng }, function(data) {
     parseResults(data);
   });
 };
 
-//Bind event listeners for search submission
-//Find the container for search box and bind event on submit.
+//Bind event listeners for each search
+
 var bindControls = function(){
+  //Find the container for search box and bind event on submit.
 var searchContainer = $("#search-container")[0];
-google.maps.event.addDOMListener(searchContainer, "submit", function(event) {
+google.maps.event.addDomListener(searchContainer, "submit", function(event) {
   event.preventDefault();
   search();
 });
 
 var searchButton = $("map-search-submit")[0];
-google.maps.event.addDOMListener(searchButton, "click", function(event){
+google.maps.event.addDomListener(searchButton, "click", function(event){
   event.preventDefault();
   search();
 });
@@ -72,17 +74,17 @@ var search = function() {
 
   // POST ajax request to Google geocoder and parse coordinates
   $.post("https://maps.googleapis.com/maps/api/geocode/json?address=" + searchLocation.split(" ").join("+") + "&key=" + Api_key, function(data) {
-     panToCoordinates(data);
+     getCoordinates(data);
   });
 
 };
 
-var panToCoordinates = function(data) {
+var getCoordinates = function(data) {
   var geoCoordinates = data.results[0].geometry.location;
-  map.panTo(geoCoordinates);
+  map.get(geoCoordinates);
 
   $.post("/search", geoCoordinates, function(data) {
-    parseResults(data);
+    parseResults.log(data);
   });
 };
 
@@ -91,7 +93,7 @@ var parseResults = function(data) {
     var business = data.businesses[i];
 
     // Construct HTML for each listing and append to the DOM with fade in effect.
-    $("#results").append("<div class='result'><img src='" + business.image_url +
+    $("#search-results").append("<div class='result'><img src='" + business.image_url +
       "'><div class='business-name'><a target= '_blank' href='" +
       business.url +"'>" +
       business.name + "</a></div>" +

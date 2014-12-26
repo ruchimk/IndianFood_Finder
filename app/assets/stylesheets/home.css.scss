@@ -6,17 +6,21 @@
 html, body {
   height: 100%;
   width: 100%;
+  margin: 0;
+  padding: 0;
 }
 
 #map-canvas {
   height: 100%;
   width: 100%;
+  margin: 0;
+  padding: 0;
 }
 
 
 #search-container {
   top: 0;
-  left: 0;
+  left: 5;
   margin: 10px;
   padding: 10px;
   position: absolute;
@@ -29,14 +33,34 @@ html, body {
     input {
       height: 30px;
       padding-left: 10px;
-      width: 450px;
+      width: 75%;
     }
 
     form a {
-      background: #c41200;
+      background: green;
+      text-decoration: underline;
       color: #fff;
       display: inline-block;
-      padding: 7px 9px 7px 9px;
+      padding: 10px;
+    }
+  }
+
+  #search-results {
+
+    margin-top: 15px;
+    width: 100%;
+
+    .result {
+      background-color: white;
+      display:inline-block;
+      margin-bottom: 5px;
+      width: 100%;
+
+      img {
+        display: inline-block;
+        float: left;
+        height: 50px;
+      }
     }
   }
 }
