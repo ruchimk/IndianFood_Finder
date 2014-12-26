@@ -3,7 +3,7 @@ class HomeController < ApplicationController
   end
 
   def search
-    parameters = { term: params[:term], limit: 16 }
+    parameters = { term: "indian restaurants", limit: 16 }
     render json: Yelp.client.search('San Francisco', parameters)
   end
 

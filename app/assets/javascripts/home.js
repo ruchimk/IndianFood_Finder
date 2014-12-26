@@ -1,5 +1,4 @@
 var markersArray = [];
-var inactive = false;
 
 $(document).ready(function() {
    // Initialize map on load.
@@ -8,14 +7,11 @@ $(document).ready(function() {
   });
 });
 
-var initialize = function(startingLat, startingLng) {
+var initialize = function() {
   var mapOptions = {
-    center: new google.maps.LatLng(startingLat, startingLng),
-    zoom: 12,
+    center: new google.maps.LatLng(37.7577,-122.4376),
+    zoom: 14,
 
-     // Hide Google map controls
-    panControl: false,
-    streetViewControl: false,
 
     // Move the zoom controls
     zoomControl: true,
@@ -27,4 +23,21 @@ var initialize = function(startingLat, startingLng) {
 
   // Create a new Google map with the options above.
   var map = new google.maps.Map($("#map-canvas")[0], mapOptions);
+
+  bindControls(map);
 };
+
+//Bind event listeners for search submission
+//Find the container for search box and bind event on submit.
+var bindControls = function(map){
+google.maps.event.addDOMListener(searchContainer, "submit", function(event){
+  event.preventDefault();
+  search(map);
+});
+
+var searchButton = $("map-search-submit")[0];
+google.maps.event.addDOMListener(searchButton, "click", function(event){
+  event.preventDefault();
+  search(map);
+});
+}

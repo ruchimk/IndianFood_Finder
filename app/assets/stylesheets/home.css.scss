@@ -12,3 +12,30 @@ html, body {
   height: 100%;
   width: 100%;
 }
+
+
+#search-container {
+  left: 0;
+  margin: 10px;
+  position: absolute;
+  top: 0;
+
+  #map-search {
+    box-shadow: 2px 2px 3px #999;
+    -moz-box-shadow: 2px 2px 3px #999;
+    -webkit-box-shadow: 2px 2px 3px #999;
+
+    input {
+      height: 30px;
+      padding-left: 10px;
+      width: 450px;
+    }
+
+    form a {
+      background: #c41200;
+      color: #fff;
+      display: inline-block;
+      padding: 7px 9px 7px 9px;
+    }
+  }
+}
