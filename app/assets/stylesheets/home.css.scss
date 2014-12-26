@@ -15,10 +15,11 @@ html, body {
 
 
 #search-container {
+  top: 0;
   left: 0;
   margin: 10px;
+  padding: 10px;
   position: absolute;
-  top: 0;
 
   #map-search {
     box-shadow: 2px 2px 3px #999;
