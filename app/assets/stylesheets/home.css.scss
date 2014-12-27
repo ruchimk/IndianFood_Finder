@@ -17,18 +17,15 @@ html, body {
   padding: 0;
 }
 
-
 #search-container {
-  top: 0;
-  left: 5;
+  left: 0;
   margin: 10px;
-  padding: 10px;
   position: absolute;
+  top: 0;
+  width: 40%;
 
   #map-search {
-    box-shadow: 2px 2px 3px #999;
-    -moz-box-shadow: 2px 2px 3px #999;
-    -webkit-box-shadow: 2px 2px 3px #999;
+    margin-left: 5px;
 
     input {
       height: 30px;
@@ -36,30 +33,55 @@ html, body {
       width: 75%;
     }
 
+    input:focus {
+      outline: none;
+      border: 1px solid #c41200;
+    }
+
     form a {
       background: green;
-      text-decoration: underline;
-      color: #fff;
+      color: white;
       display: inline-block;
-      padding: 10px;
+      font-size: 0.8em;
+      padding: 9px;
+      text-align: center;
+      text-decoration: underline;
+      width: 10%;
     }
   }
 
-  #search-results {
+  #results {
 
     margin-top: 15px;
-    width: 100%;
+    width: 93%;
 
     .result {
-      background-color: white;
-      display:inline-block;
+      background: rgba(255,255,255, 0.75);
+      border-radius: 20px 5px 5px 20px;
+      display: inline-block;
       margin-bottom: 5px;
       width: 100%;
 
+      .business-address {
+        font-size: 0.8em;
+        margin-left: 15%;
+      }
+
+      .business-name {
+        margin-top: 1%;
+        margin-left: 15%;
+
+        a {
+          text-decoration: none;
+        }
+      }
+
       img {
+        border-radius: 50%;
         display: inline-block;
         float: left;
-        height: 50px;
+        height: auto;
+        width: 14%;
       }
     }
   }

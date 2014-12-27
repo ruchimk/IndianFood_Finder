@@ -84,7 +84,7 @@ var getCoordinates = function(data) {
   map.get(geoCoordinates);
 
   $.post("/search", geoCoordinates, function(data) {
-    parseResults.log(data);
+    parseResults(data);
   });
 };
 

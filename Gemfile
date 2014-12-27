@@ -32,8 +32,8 @@ group :production do
   gem 'rails_12factor'
 end
 
-gem 'yelp'
-gem 'simple_oauth', '~> 0.2'
+gem 'yelp', require: 'yelp'
+gem 'simple_oauth', '=0.2.0'
 gem 'figaro'
 
 
