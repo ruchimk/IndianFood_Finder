@@ -93,7 +93,7 @@ var appleMapsStyle = [{
     }]
 }];
 var map;
-var searchContainer = $("#search-container")[0];
+var searchContainer = $("#map-search-container")[0];
 
 
 // Initialize map on load.
@@ -144,22 +144,22 @@ var initialize = function(startingLat, startingLng) {
 
 var bindControls = function() {
     //Find the container for search and bind event on submit.
-    var searchContainer = $("#search-container");
-    // if (event) {
+    var searchContainer = $("#map-search-container");
+    if (event) {
         google.maps.event.addDomListener(searchContainer, "submit", function(event) {
             event.preventDefault();
             search();
         });
-    // };
+    };
 
 
     var searchButton = $("map-search-submit");
-    // if (event) {
+    if (event) {
         google.maps.event.addDomListener(searchButton, "click", function(event) {
             event.preventDefault();
             search();
         });
-    // };
+    };
 };
 
 var search = function() {
@@ -175,12 +175,13 @@ var search = function() {
 
     // POST ajax request to Google geocoder and parse coordinates
     //https://developers.google.com/maps/documentation/geocoding/
-    $.post("https://maps.googleapis.com/maps/api/geocode/json?address=" + searchLocation.split(" ").join("+") + "&key=" + "AIzaSyB9rk_HtKNk4sElLER6i9YARuQb8KbPT4s", function(data) {
+    $.post("https://maps.googleapis.com/maps/api/geocode/json?address=" + searchLocation.split(" ").join("+") + "&key=" + Api_key, function(data) {
         getCoordinates(data);
     });
 
 };
 
+// Get geocoordinates of user's search input.
 var getCoordinates = function(data) {
     var geoCoordinates = data.results[0].geometry.location;
     map.get(geoCoordinates);
@@ -189,6 +190,7 @@ var getCoordinates = function(data) {
         parseResults(data);
     });
 };
+
 
 var parseResults = function(data) {
     for (var i = 0; i < data.businesses.length; i++) {
@@ -211,6 +213,8 @@ var parseResults = function(data) {
     placeMarkers(resultsArray);
 };
 
+
+// Place markers for each business resulting from search.
 var placeMarkers = function(resultsArray) {
     for (var i = 0; i < resultsArray.length; i++) {
 
