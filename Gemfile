@@ -27,6 +27,7 @@ gem 'sdoc', '~> 0.4.0',          group: :doc
 gem 'spring',        group: :development
 
 gem 'pry-rails', group: :development
+gem 'pry', group: :development
 
 group :production do
   gem 'rails_12factor'
