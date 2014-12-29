@@ -144,22 +144,22 @@ var initialize = function(startingLat, startingLng) {
 
 var bindControls = function() {
     //Find the container for search and bind event on submit.
-    var searchContainer = $("#search-container")[0];
-    if (event) {
+    var searchContainer = $("#search-container");
+    // if (event) {
         google.maps.event.addDomListener(searchContainer, "submit", function(event) {
             event.preventDefault();
             search();
         });
-    };
+    // };
 
 
-    var searchButton = $("map-search-submit")[0];
-    if (event) {
+    var searchButton = $("map-search-submit");
+    // if (event) {
         google.maps.event.addDomListener(searchButton, "click", function(event) {
             event.preventDefault();
             search();
         });
-    };
+    // };
 };
 
 var search = function() {
