@@ -10,6 +10,7 @@ html, body {
   padding: 0;
 }
 
+
 #map-canvas {
   height: 100%;
   width: 100%;
@@ -17,11 +18,11 @@ html, body {
   padding: 0;
 }
 
-#search-container {
+#map-search-container {
   left: 0;
   margin: 10px;
   position: absolute;
-  top: 0;
+  top: 5%;
   width: 40%;
 
   #map-search {
@@ -50,12 +51,12 @@ html, body {
     }
   }
 
-  #results {
+  #search-results {
 
     margin-top: 15px;
     width: 93%;
 
-    .result {
+    .search-result {
       background: rgba(255,255,255, 0.75);
       border-radius: 20px 5px 5px 20px;
       display: inline-block;

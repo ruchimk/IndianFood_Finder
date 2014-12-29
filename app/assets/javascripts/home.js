@@ -107,7 +107,7 @@ $(document).ready(function() {
 var initialize = function(startingLat, startingLng) {
     var mapOptions = {
         center: new google.maps.LatLng(37.7577, -122.4376),
-        zoom: 13,
+        zoom: 12,
 
         mapTypeId: google.maps.MapTypeId.ROADMAP,
         styles: appleMapsStyle,
