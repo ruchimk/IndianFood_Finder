@@ -93,7 +93,7 @@ var appleMapsStyle = [{
     }]
 }];
 var map;
-var searchContainer = $("#map-search-container")[0];
+var searchContainer = $("#search-container")[0];
 
 
 // Initialize map on load.
@@ -144,22 +144,22 @@ var initialize = function(startingLat, startingLng) {
 
 var bindControls = function() {
     //Find the container for search and bind event on submit.
-    var searchContainer = $("#map-search-container");
-    if (event) {
+    var searchContainer = $("#search-container");
+    // if (event) {
         google.maps.event.addDomListener(searchContainer, "submit", function(event) {
             event.preventDefault();
             search();
         });
-    };
+    // };
 
 
     var searchButton = $("map-search-submit");
-    if (event) {
+    // if (event) {
         google.maps.event.addDomListener(searchButton, "click", function(event) {
             event.preventDefault();
             search();
         });
-    };
+    // };
 };
 
 var search = function() {
@@ -175,13 +175,12 @@ var search = function() {
 
     // POST ajax request to Google geocoder and parse coordinates
     //https://developers.google.com/maps/documentation/geocoding/
-    $.post("https://maps.googleapis.com/maps/api/geocode/json?address=" + searchLocation.split(" ").join("+") + "&key=" + Api_key, function(data) {
+    $.post("https://maps.googleapis.com/maps/api/geocode/json?address=" + searchLocation.split(" ").join("+") + "&key=" + "AIzaSyB9rk_HtKNk4sElLER6i9YARuQb8KbPT4s", function(data) {
         getCoordinates(data);
     });
 
 };
 
-// Get geocoordinates of user's search input.
 var getCoordinates = function(data) {
     var geoCoordinates = data.results[0].geometry.location;
     map.get(geoCoordinates);
@@ -191,13 +190,12 @@ var getCoordinates = function(data) {
     });
 };
 
-
 var parseResults = function(data) {
     for (var i = 0; i < data.businesses.length; i++) {
         var business = data.businesses[i];
 
         // Construct HTML for each listing and append to the DOM with fade in effect.
-        $("#search-results").append("<div class='search-result'><img src='" + business.image_url +
+        $("#search-results").append("<div class='result'><img src='" + business.image_url +
             "'><div class='business-name'><a target= '_blank' href='" +
             business.url + "'>" +
             business.name + "</a></div>" +
@@ -213,12 +211,11 @@ var parseResults = function(data) {
     placeMarkers(resultsArray);
 };
 
-
-// Place markers for each business resulting from search.
 var placeMarkers = function(resultsArray) {
     for (var i = 0; i < resultsArray.length; i++) {
 
         // If there are coordinates in the Yelp data, use those to place a marker on the map.
+        //https://github.com/Yelp/yelp-ruby
         if (resultsArray[i].location.coordinate) {
             var locationCoordinates = resultsArray[i].location.coordinate;
             var coordinates = {

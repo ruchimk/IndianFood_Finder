@@ -7,7 +7,8 @@ class HomeController < ApplicationController
     parameters = { term: "indian restaurants", limit: 16}
     # coordinates = { latitude: 37.7577, longitude: -122.4376 }
     # render json: Yelp.client.search('San Francisco', parameters)
-    render json: Yelp.client.search_by_coordinates(coordinates, parameters)
+    locale = { lang: 'en' }
+    render json: Yelp.client.search_by_coordinates(coordinates, parameters, locale)
   end
 
 end
