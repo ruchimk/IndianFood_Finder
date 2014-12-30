@@ -169,7 +169,7 @@ var search = function() {
     clearMarkers();
 
     // Remove any previous results from DOM
-    $("#results").fadeOut(400, function() {
+    $("#results").fadeOut(200, function() {
         $(this).empty();
     });
 
@@ -203,7 +203,7 @@ var parseResults = function(data) {
             business.location.display_address[0] +
             "</div><div>" +
             business.location.display_address[business.location.display_address.length - 1] +
-            "</div></div></div>").hide().fadeIn(400);
+            "</div></div></div>").hide().fadeIn(200);
 
         resultsArray.push(business);
     }

@@ -15,11 +15,12 @@
  */
 
  h1 {
-color: #39845e;
+color: red;
 font-weight: bold;
 z-index:1;
-background-color: #b6e0a4;
+background-color: #ffff;
 border-radius: 10px;
+border: 3px solid #39845e ;
 font-size: 25px;
 display:inline-block;
 position:relative;
