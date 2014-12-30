@@ -36,6 +36,7 @@ end
 gem 'yelp', require: 'yelp'
 gem 'simple_oauth', '=0.2.0'
 gem 'figaro'
+gem 'bootstrap-sass', '~> 3.3.1.0'
 
 
 # Use ActiveModel has_secure_password
