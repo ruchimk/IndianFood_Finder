@@ -139,9 +139,7 @@ var initialize = function(startingLat, startingLng) {
 };
 
 //Bind event listeners for each search
-
 //https://developers.google.com/maps/documentation/javascript/examples/
-
 var bindControls = function() {
     //Find the container for search and bind event on submit.
     var searchContainer = $("#search-container");
