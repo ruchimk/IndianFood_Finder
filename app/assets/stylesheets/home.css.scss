@@ -14,8 +14,6 @@ html, body {
 #map-canvas {
   height: 100%;
   width: 100%;
-  margin: 0;
-  padding: 0;
 }
 
 #map-search-container {
@@ -31,7 +29,7 @@ html, body {
     input {
       height: 30px;
       padding-left: 10px;
-      width: 75%;
+      width: 70%;
     }
 
     input:focus {
@@ -48,29 +46,31 @@ html, body {
       text-align: center;
       text-decoration: underline;
       width: 10%;
+      height: 30px;
+      position: fixed;
     }
   }
 
   #search-results {
 
     margin-top: 15px;
-    width: 93%;
+    width: 100%;
 
     .search-result {
-      background: rgba(255,255,255, 0.75);
+      background: #eaf4f8;
       border-radius: 20px 5px 5px 20px;
       display: inline-block;
       margin-bottom: 5px;
-      width: 100%;
+      width: 55%;
 
       .business-address {
-        font-size: 0.8em;
-        margin-left: 15%;
+        font-size: 1em;
+        margin-left: 10%;
       }
 
       .business-name {
-        margin-top: 1%;
-        margin-left: 15%;
+        margin-top: 5%;
+        margin-left: 10%;
 
         a {
           text-decoration: none;

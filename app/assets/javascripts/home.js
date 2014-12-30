@@ -193,7 +193,7 @@ var parseResults = function(data) {
         var business = data.businesses[i];
 
         // Construct HTML for each listing and append to the DOM with fade in effect.
-        $("#search-results").append("<div class='result'><img src='" + business.image_url +
+        $("#search-results").append("<div class='search-result'><img src='" + business.image_url +
             "'><div class='business-name'><a target= '_blank' href='" +
             business.url + "'>" +
             business.name + "</a></div>" +
