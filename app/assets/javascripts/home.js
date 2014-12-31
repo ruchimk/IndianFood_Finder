@@ -1,6 +1,3 @@
-//all the markers
-var markersArray = [];
-var resultsArray = [];
 //https://gist.github.com/bndkn/b421ba760bcb3960b545
 var appleMapsStyle = [{
     "featureType": "water",
@@ -92,6 +89,12 @@ var appleMapsStyle = [{
         "color": "#cfb2db"
     }]
 }];
+
+//all the markers
+var markersArray = [];
+var resultsArray = [];
+
+//making map and searchContainer global
 var map;
 var searchContainer = $("#search-container")[0];
 
@@ -107,7 +110,7 @@ $(document).ready(function() {
 var initialize = function(startingLat, startingLng) {
     var mapOptions = {
         center: new google.maps.LatLng(startingLat, startingLng),
-        zoom: 12,
+        zoom: 14,
 
         mapTypeId: google.maps.MapTypeId.ROADMAP,
         styles: appleMapsStyle,
@@ -185,7 +188,7 @@ var getCoordinates = function(data) {
 
     $.post("/search", geoCoordinates, function(data) {
         parseResults(data);
-        console.log(data)
+        // console.log(data)
     });
 };
 
@@ -251,7 +254,7 @@ var buildInfoWindow = function(marker, business) {
         infoWindow.open(map,marker);
     });
 
-    return infoWindow();
+    return infoWindow;
 
 }
 
@@ -268,7 +271,7 @@ function buildInfoSideTemplate(business, index) {
 
 function buildInfoWindowTemplate(business) {
     return "<div class='search-result'><img src='" + business.image_url +
-                 "' class='businessImg'><div class='business-name'><a target= '_blank' href='" +
+                 "' class='businessImg'><div class='business-name-url'><a target= '_blank' href='" +
                  business.url + "'>" +
                  business.name + "</a></div>" +
                  "<div class='business-address'><div>" +
