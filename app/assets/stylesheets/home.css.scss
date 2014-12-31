@@ -34,21 +34,14 @@ html, body {
     }
 
     input:focus {
+      border: 2px solid #27612f;
       outline: none;
-      border: 1px solid green;
     }
 
-    form a {
-      background: green;
-      color: white;
+    button {
+      background:#27612f;
+      color: #fff;
       display: inline-block;
-      font-size: 1em;
-      padding: 9px;
-      text-align: center;
-      text-decoration: underline;
-      width: 10%;
-      height: 30px;
-      position: relative;
     }
   }
 
@@ -58,6 +51,9 @@ html, body {
     width: 50%;
     height: calc(100% - 50px);
     overflow: scroll;
+    border: 3px solid #27612f;
+    padding: 10px;
+
     .search-result {
       background: #eaf4f8;
       border-radius: 20px 5px 5px 20px;
@@ -79,11 +75,11 @@ html, body {
       }
 
       .businessImg {
-        border-radius: 50%;
+        border-radius: 100%;
         display: inline-block;
         float: left;
         height: auto;
-        width: 14%;
+        width: 25%;
       }
     }
   }
