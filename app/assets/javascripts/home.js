@@ -189,26 +189,22 @@ var getCoordinates = function(data) {
 
     $.post("/search", geoCoordinates, function(data) {
         parseResults(data);
-        // console.log(data)
+        console.log(data);
     });
 };
 
 var parseResults = function(data) {
     for (var i = 0; i < data.businesses.length; i++) {
         var business = data.businesses[i];
-
         // Construct HTML for each listing and append to the DOM with fade in effect.
         $("#search-results").append(buildInfoSideTemplate(business, i)).hide().fadeIn(200);
-
         resultsArray.push(business);
     }
-
     placeMarkers(resultsArray);
 };
 
 var placeMarkers = function(resultsArray) {
     for (var i = 0; i < resultsArray.length; i++) {
-
         // If there are coordinates in the Yelp data, use those to place a marker on the map.
         //https://github.com/Yelp/yelp-ruby
         if (resultsArray[i].location.coordinate) {
@@ -247,11 +243,18 @@ var clearMarkers = function() {
 
 var buildInfoWindow = function(marker, business) {
     var infoWindow = new google.maps.InfoWindow({
-        content: buildInfoWindowTemplate(business)
+        content: '<p id="hook">' + buildInfoWindowTemplate(business) + '</p>' //need to append function 'buildInfoWindowTemplate(business)' in p tags to style infowindow;http://stackoverflow.com/questions/5634991/styling-google-maps-infowindow
     });
 
     google.maps.event.addListener(marker, 'click', function() {
         infoWindow.open(map, marker);
+        var l = $('#hook').parent().parent().parent().siblings();
+        for (var i = 0; i < l.length; i++) {
+            if ($(l[i]).css('z-index') == 'auto') {
+                $(l[i]).css('border-radius', '16px 16px 16px 16px');
+                $(l[i]).css('border', '2px solid red');
+            }
+        }
     });
 
     return infoWindow;
@@ -266,43 +269,26 @@ function buildInfoSideTemplate(business, index) {
         business.location.display_address[0] +
         "</div><div>" +
         business.location.display_address[business.location.display_address.length - 1] +
-        "</div></div></div>"
+        "</div></div>" +
+        business.phone +
+        "</div>"
 }
 
 function buildInfoWindowTemplate(business) {
-    return "<div class='search-result'><img src='" + business.image_url +
+    return "<div class='search-result-info-window'><img src='" + business.image_url +
         "' class='businessImg'><div class='business-name-url'><a target= '_blank' href='" +
         business.url + "'>" +
         business.name + "</a></div>" +
-        "<div class='business-address'><div>" +
-        business.location.display_address[0] +
-        "</div><div>" +
-        business.location.display_address[business.location.display_address.length - 1] +
-        "</div></div><img src='" + business.rating_img_url + "'></div>"
+        "<div class='snippet_text'>" +
+        business.snippet_text + "</div><div>" +
+        "<img src='" + business.rating_img_url + "'></div></div>"
 }
 
 function openInfoWindow(index) {
-        var marker = resultsArray[index].marker,
-            infoWindow = resultsArray[index].infoWindow;
-        infoWindow.open(map, marker)
+    if (activeInfowindow) {
+        activeInfowindow.close();
+    }
+    var marker = resultsArray[index].marker;
+    activeInfowindow = resultsArray[index].infoWindow;
+    activeInfowindow.open(map, marker)
 }
-
-
-
-// function openInfoWindow(index) {
-//     if (activeInfowindow) {
-//         activeInfowindow.close();
-//     }
-//     var marker = resultsArray[index].marker;
-//     activeInfowindow = marker.infoWindow;
-//     activeInfowindow.open(map, marker)
-// }
-
-
-    // if (resultsArray.length < 1) {
-    //     var marker = resultsArray[index].marker,
-    //         infoWindow = resultsArray[index].infoWindow;
-    //     infoWindow.open(map, marker)
-    // } else {
-    //     resultsArray[index].infoWindow.close();
-    // }
