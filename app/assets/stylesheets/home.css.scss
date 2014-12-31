@@ -12,7 +12,7 @@ html, body {
 
 
 #map-canvas {
-  height: 100%;
+  height: calc(100% - 35px);
   width: 100%;
 }
 
@@ -22,6 +22,7 @@ html, body {
   position: absolute;
   top: 5%;
   width: 40%;
+  height: calc(100% - 35px);
 
   #map-search {
     margin-left: 5px;
@@ -41,27 +42,28 @@ html, body {
       background: green;
       color: white;
       display: inline-block;
-      font-size: 0.8em;
+      font-size: 1em;
       padding: 9px;
       text-align: center;
       text-decoration: underline;
       width: 10%;
       height: 30px;
-      position: fixed;
+      position: relative;
     }
   }
 
   #search-results {
 
     margin-top: 15px;
-    width: 100%;
-
+    width: 50%;
+    height: calc(100% - 50px);
+    overflow: scroll;
     .search-result {
       background: #eaf4f8;
       border-radius: 20px 5px 5px 20px;
       display: inline-block;
       margin-bottom: 5px;
-      width: 55%;
+      width: 100%;
 
       .business-address {
         font-size: 1em;
@@ -71,13 +73,12 @@ html, body {
       .business-name {
         margin-top: 5%;
         margin-left: 10%;
-
-        a {
-          text-decoration: none;
-        }
+        text-decoration: underline;
+        color: blue;
+        cursor: pointer;
       }
 
-      img {
+      .businessImg {
         border-radius: 50%;
         display: inline-block;
         float: left;

@@ -106,7 +106,7 @@ $(document).ready(function() {
 //Initialize map centered at SF; taking in lat long entered by user
 var initialize = function(startingLat, startingLng) {
     var mapOptions = {
-        center: new google.maps.LatLng(37.7577, -122.4376),
+        center: new google.maps.LatLng(startingLat, startingLng),
         zoom: 12,
 
         mapTypeId: google.maps.MapTypeId.ROADMAP,
@@ -151,9 +151,9 @@ var bindControls = function() {
     // };
 
 
-    var searchButton = $("map-search-submit");
+    var searchButton = $("#map-search-submit");
     // if (event) {
-        google.maps.event.addDomListener(searchButton, "click", function(event) {
+        searchButton.click(function(event) {
             event.preventDefault();
             search();
         });
@@ -162,12 +162,11 @@ var bindControls = function() {
 
 var search = function() {
     // Empty the arrays to prepare for new results.
-    var resultsArray = [];
     var searchLocation = $("#map-search input").val();
     clearMarkers();
 
     // Remove any previous results from DOM
-    $("#results").fadeOut(200, function() {
+    $("#search-results").fadeOut(200, function() {
         $(this).empty();
     });
 
@@ -175,6 +174,7 @@ var search = function() {
     //https://developers.google.com/maps/documentation/geocoding/
     $.post("https://maps.googleapis.com/maps/api/geocode/json?address=" + searchLocation.split(" ").join("+") + "&key=" + "AIzaSyB9rk_HtKNk4sElLER6i9YARuQb8KbPT4s", function(data) {
         getCoordinates(data);
+        map.setCenter({lat: data.results[0].geometry.location.lat, lng:data.results[0].geometry.location.lng} )
     });
 
 };
@@ -185,6 +185,7 @@ var getCoordinates = function(data) {
 
     $.post("/search", geoCoordinates, function(data) {
         parseResults(data);
+        console.log(data)
     });
 };
 
@@ -193,15 +194,7 @@ var parseResults = function(data) {
         var business = data.businesses[i];
 
         // Construct HTML for each listing and append to the DOM with fade in effect.
-        $("#search-results").append("<div class='search-result'><img src='" + business.image_url +
-            "'><div class='business-name'><a target= '_blank' href='" +
-            business.url + "'>" +
-            business.name + "</a></div>" +
-            "<div class='business-address'><div>" +
-            business.location.display_address[0] +
-            "</div><div>" +
-            business.location.display_address[business.location.display_address.length - 1] +
-            "</div></div></div>").hide().fadeIn(200);
+        $("#search-results").append(buildInfoSideTemplate(business, i)).hide().fadeIn(200);
 
         resultsArray.push(business);
     }
@@ -230,6 +223,12 @@ var placeMarkers = function(resultsArray) {
 
             // Save the marker object for deletion later.
             markersArray.push(marker);
+
+            //Create InfoWindow for marker
+            var infoWindow = buildInfoWindow(marker, resultsArray[i])
+            resultsArray[i].infoWindow = infoWindow
+            resultsArray[i].marker = marker
+
         }
     }
 };
@@ -242,3 +241,45 @@ var clearMarkers = function() {
 
     markersArray = [];
 };
+
+var buildInfoWindow = function(marker, business) {
+    var infoWindow = new google.maps.InfoWindow({
+        content: buildInfoWindowTemplate(business)
+    });
+
+    google.maps.event.addListener(marker, 'click', function() {
+        infoWindow.open(map,marker);
+    });
+
+    return infoWindow();
+
+}
+
+function buildInfoSideTemplate(business, index) {
+   return "<div class='search-result'><img src='" + business.image_url +
+                "' class='businessImg'><div class='business-name' onclick='openInfoWindow("+index+")'>" +
+                business.name + "</div>" +
+                "<div class='business-address'><div>" +
+                business.location.display_address[0] +
+                "</div><div>" +
+                business.location.display_address[business.location.display_address.length - 1] +
+                "</div></div></div>"
+}
+
+function buildInfoWindowTemplate(business) {
+    return "<div class='search-result'><img src='" + business.image_url +
+                 "' class='businessImg'><div class='business-name'><a target= '_blank' href='" +
+                 business.url + "'>" +
+                 business.name + "</a></div>" +
+                 "<div class='business-address'><div>" +
+                 business.location.display_address[0] +
+                 "</div><div>" +
+                 business.location.display_address[business.location.display_address.length - 1] +
+                 "</div></div><img src='"+business.rating_img_url+"'></div>"
+}
+
+function openInfoWindow(index) {
+    var marker = resultsArray[index].marker,
+        infoWindow = resultsArray[index].infoWindow;
+    infoWindow.open(map,marker)
+}
