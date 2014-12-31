@@ -90,13 +90,14 @@ var appleMapsStyle = [{
     }]
 }];
 
-//all the markers
+//All the markers
 var markersArray = [];
 var resultsArray = [];
 
-//making map and searchContainer global
+//Making map, searchContainer, and activeInfoWindow global
 var map;
 var searchContainer = $("#search-container")[0];
+var activeInfowindow;
 
 
 // Initialize map on load.
@@ -110,7 +111,7 @@ $(document).ready(function() {
 var initialize = function(startingLat, startingLng) {
     var mapOptions = {
         center: new google.maps.LatLng(startingLat, startingLng),
-        zoom: 14,
+        zoom: 10,
 
         mapTypeId: google.maps.MapTypeId.ROADMAP,
         styles: appleMapsStyle,
@@ -146,21 +147,18 @@ var initialize = function(startingLat, startingLng) {
 var bindControls = function() {
     //Find the container for search and bind event on submit.
     var searchContainer = $("#search-container");
-    // if (event) {
-        google.maps.event.addDomListener(searchContainer, "submit", function(event) {
-            event.preventDefault();
-            search();
-        });
-    // };
+    google.maps.event.addDomListener(searchContainer, "submit", function(event) {
+        event.preventDefault();
+        search();
+    });
+
 
 
     var searchButton = $("#map-search-submit");
-    // if (event) {
-        searchButton.click(function(event) {
-            event.preventDefault();
-            search();
-        });
-    // };
+    searchButton.click(function(event) {
+        event.preventDefault();
+        search();
+    });
 };
 
 var search = function() {
@@ -177,7 +175,10 @@ var search = function() {
     //https://developers.google.com/maps/documentation/geocoding/
     $.post("https://maps.googleapis.com/maps/api/geocode/json?address=" + searchLocation.split(" ").join("+") + "&key=" + "AIzaSyB9rk_HtKNk4sElLER6i9YARuQb8KbPT4s", function(data) {
         getCoordinates(data);
-        map.setCenter({lat: data.results[0].geometry.location.lat, lng:data.results[0].geometry.location.lng} )
+        map.setCenter({
+            lat: data.results[0].geometry.location.lat,
+            lng: data.results[0].geometry.location.lng
+        })
     });
 
 };
@@ -231,7 +232,6 @@ var placeMarkers = function(resultsArray) {
             var infoWindow = buildInfoWindow(marker, resultsArray[i])
             resultsArray[i].infoWindow = infoWindow
             resultsArray[i].marker = marker
-
         }
     }
 };
@@ -251,7 +251,7 @@ var buildInfoWindow = function(marker, business) {
     });
 
     google.maps.event.addListener(marker, 'click', function() {
-        infoWindow.open(map,marker);
+        infoWindow.open(map, marker);
     });
 
     return infoWindow;
@@ -259,30 +259,50 @@ var buildInfoWindow = function(marker, business) {
 }
 
 function buildInfoSideTemplate(business, index) {
-   return "<div class='search-result'><img src='" + business.image_url +
-                "' class='businessImg'><div class='business-name' onclick='openInfoWindow("+index+")'>" +
-                business.name + "</div>" +
-                "<div class='business-address'><div>" +
-                business.location.display_address[0] +
-                "</div><div>" +
-                business.location.display_address[business.location.display_address.length - 1] +
-                "</div></div></div>"
+    return "<div class='search-result'><img src='" + business.image_url +
+        "' class='businessImg'><div class='business-name' onclick='openInfoWindow(" + index + ")'>" +
+        business.name + "</div>" +
+        "<div class='business-address'><div>" +
+        business.location.display_address[0] +
+        "</div><div>" +
+        business.location.display_address[business.location.display_address.length - 1] +
+        "</div></div></div>"
 }
 
 function buildInfoWindowTemplate(business) {
     return "<div class='search-result'><img src='" + business.image_url +
-                 "' class='businessImg'><div class='business-name-url'><a target= '_blank' href='" +
-                 business.url + "'>" +
-                 business.name + "</a></div>" +
-                 "<div class='business-address'><div>" +
-                 business.location.display_address[0] +
-                 "</div><div>" +
-                 business.location.display_address[business.location.display_address.length - 1] +
-                 "</div></div><img src='"+business.rating_img_url+"'></div>"
+        "' class='businessImg'><div class='business-name-url'><a target= '_blank' href='" +
+        business.url + "'>" +
+        business.name + "</a></div>" +
+        "<div class='business-address'><div>" +
+        business.location.display_address[0] +
+        "</div><div>" +
+        business.location.display_address[business.location.display_address.length - 1] +
+        "</div></div><img src='" + business.rating_img_url + "'></div>"
 }
 
 function openInfoWindow(index) {
-    var marker = resultsArray[index].marker,
-        infoWindow = resultsArray[index].infoWindow;
-    infoWindow.open(map,marker)
+        var marker = resultsArray[index].marker,
+            infoWindow = resultsArray[index].infoWindow;
+        infoWindow.open(map, marker)
 }
+
+
+
+// function openInfoWindow(index) {
+//     if (activeInfowindow) {
+//         activeInfowindow.close();
+//     }
+//     var marker = resultsArray[index].marker;
+//     activeInfowindow = marker.infoWindow;
+//     activeInfowindow.open(map, marker)
+// }
+
+
+    // if (resultsArray.length < 1) {
+    //     var marker = resultsArray[index].marker,
+    //         infoWindow = resultsArray[index].infoWindow;
+    //     infoWindow.open(map, marker)
+    // } else {
+    //     resultsArray[index].infoWindow.close();
+    // }
