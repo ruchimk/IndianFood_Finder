@@ -1,4 +1,4 @@
-//https://gist.github.com/bndkn/b421ba760bcb3960b545
+//Apple Maps style for Google Maps: https://gist.github.com/bndkn/b421ba760bcb3960b545
 var appleMapsStyle = [{
     "featureType": "water",
     "elementType": "geometry",
@@ -90,7 +90,7 @@ var appleMapsStyle = [{
     }]
 }];
 
-//All the markers
+//Markers
 var markersArray = [];
 var resultsArray = [];
 
@@ -152,8 +152,6 @@ var bindControls = function() {
         search();
     });
 
-
-
     var searchButton = $("#map-search-submit");
     searchButton.click(function(event) {
         event.preventDefault();
@@ -180,7 +178,6 @@ var search = function() {
             lng: data.results[0].geometry.location.lng
         })
     });
-
 };
 
 var getCoordinates = function(data) {
@@ -243,18 +240,11 @@ var clearMarkers = function() {
 
 var buildInfoWindow = function(marker, business) {
     var infoWindow = new google.maps.InfoWindow({
-        content: '<p id="hook">' + buildInfoWindowTemplate(business) + '</p>' //need to append function 'buildInfoWindowTemplate(business)' in p tags to style infowindow;http://stackoverflow.com/questions/5634991/styling-google-maps-infowindow
+        content: buildInfoWindowTemplate(business)
     });
 
     google.maps.event.addListener(marker, 'click', function() {
         infoWindow.open(map, marker);
-        var l = $('#hook').parent().parent().parent().siblings();
-        for (var i = 0; i < l.length; i++) {
-            if ($(l[i]).css('z-index') == 'auto') {
-                $(l[i]).css('border-radius', '16px 16px 16px 16px');
-                $(l[i]).css('border', '2px solid red');
-            }
-        }
     });
 
     return infoWindow;
@@ -269,9 +259,8 @@ function buildInfoSideTemplate(business, index) {
         business.location.display_address[0] +
         "</div><div>" +
         business.location.display_address[business.location.display_address.length - 1] +
-        "</div></div>" +
-        business.phone +
-        "</div>"
+        "</div><div class='phone'><a href='tel:" +
+        business.display_phone + "'>Call "+business.display_phone+ "</a></div></div>"
 }
 
 function buildInfoWindowTemplate(business) {
@@ -279,8 +268,8 @@ function buildInfoWindowTemplate(business) {
         "' class='businessImg'><div class='business-name-url'><a target= '_blank' href='" +
         business.url + "'>" +
         business.name + "</a></div>" +
-        "<div class='snippet_text'>" +
-        business.snippet_text + "</div><div>" +
+        "<div class='snippet_text'>" + "Rating:" +
+        business.rating + "</div><div>" +
         "<img src='" + business.rating_img_url + "'></div></div>"
 }
 
