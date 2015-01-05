@@ -264,7 +264,8 @@ function buildInfoWindowTemplate(business) {
         business.name + "</a></div>" +
         "<div class='snippet_text'>" + "Rating:" +
         business.rating + "</div><div>" +
-        "<img src='" + business.rating_img_url + "'></div></div>"
+        "<img src='" + business.rating_img_url + "'></div><div>"+
+        Number((business.distance * 0.00062).toFixed(2)) +" Miles away" + "</div></div>"
 }
 
 function openInfoWindow(index) {
