@@ -103,7 +103,7 @@ var activeInfowindow;
 // Initialize map on load.
 $(document).ready(function() {
     navigator.geolocation.getCurrentPosition(function(position) {
-        initialize(position.coords.latitude, position.coords.longitude);
+        initialize(37.7577, -122.4376);
     });
 });
 
@@ -111,15 +111,12 @@ $(document).ready(function() {
 var initialize = function(startingLat, startingLng) {
     var mapOptions = {
         center: new google.maps.LatLng(startingLat, startingLng),
-        zoom: 10,
-
+        zoom: 14,
         mapTypeId: google.maps.MapTypeId.ROADMAP,
         styles: appleMapsStyle,
-
         // Hide Google map controls
         panControl: false,
         streetViewControl: false,
-
         // Move the zoom controls
         zoomControl: true,
         zoomControlOptions: {
@@ -130,28 +127,27 @@ var initialize = function(startingLat, startingLng) {
 
     // Create a new Google map with the options above.
     map = new google.maps.Map($("#map-canvas")[0], mapOptions);
-
     bindControls();
 
     // Populate results and map with indian restaurants around user.
-    $.post("/search", {
+    $.get("/search", {
         lat: startingLat,
         lng: startingLng
     }, function(data) {
         parseResults(data);
     });
+
 };
 
 //Bind event listeners for each search
 //https://developers.google.com/maps/documentation/javascript/examples/
 var bindControls = function() {
-    //Find the container for search and bind event on submit.
     var searchContainer = $("#search-container");
+    //AddDomListener is creating an event listener on searchContainer object on submit to execute search function
     google.maps.event.addDomListener(searchContainer, "submit", function(event) {
         event.preventDefault();
         search();
     });
-
     var searchButton = $("#map-search-submit");
     searchButton.click(function(event) {
         event.preventDefault();
@@ -169,9 +165,9 @@ var search = function() {
         $(this).empty();
     });
 
-    // POST ajax request to Google geocoder and parse coordinates
+    // Get ajax request to Google geocoder and parse coordinates
     //https://developers.google.com/maps/documentation/geocoding/
-    $.post("https://maps.googleapis.com/maps/api/geocode/json?address=" + searchLocation.split(" ").join("+") + "&key=" + "AIzaSyB9rk_HtKNk4sElLER6i9YARuQb8KbPT4s", function(data) {
+    $.get("https://maps.googleapis.com/maps/api/geocode/json?address=" + searchLocation.split(" ").join("+") + "&key=" + "AIzaSyB9rk_HtKNk4sElLER6i9YARuQb8KbPT4s", function(data) {
         getCoordinates(data);
         map.setCenter({
             lat: data.results[0].geometry.location.lat,
@@ -183,8 +179,7 @@ var search = function() {
 var getCoordinates = function(data) {
     var geoCoordinates = data.results[0].geometry.location;
     map.get(geoCoordinates);
-
-    $.post("/search", geoCoordinates, function(data) {
+    $.get("/search", geoCoordinates, function(data) {
         parseResults(data);
         console.log(data);
     });
@@ -215,7 +210,8 @@ var placeMarkers = function(resultsArray) {
                 animation: google.maps.Animation.DROP,
                 map: map,
                 position: coordinates,
-                title: resultsArray[i].name
+                title: resultsArray[i].name,
+                clickable: true
             });
 
             // Save the marker object for deletion later.
@@ -246,9 +242,7 @@ var buildInfoWindow = function(marker, business) {
     google.maps.event.addListener(marker, 'click', function() {
         infoWindow.open(map, marker);
     });
-
     return infoWindow;
-
 }
 
 function buildInfoSideTemplate(business, index) {
@@ -260,7 +254,7 @@ function buildInfoSideTemplate(business, index) {
         "</div><div>" +
         business.location.display_address[business.location.display_address.length - 1] +
         "</div><div class='phone'><a href='tel:" +
-        business.display_phone + "'>Call "+business.display_phone+ "</a></div></div>"
+        business.display_phone + "'>Call " + business.display_phone + "</a></div></div>"
 }
 
 function buildInfoWindowTemplate(business) {

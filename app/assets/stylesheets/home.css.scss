@@ -16,6 +16,7 @@ html, body {
   width: 100%;
 }
 
+
 #map-search-container {
   left: 0;
   margin: 10px;
@@ -89,15 +90,4 @@ html, body {
       }
     }
   }
-
-  #hook{
-    width: 200px;
-    height: 100px;
-    overflow: scroll;
-
-    .snippet_text {
-        font-size: 10px;
-        word-wrap: break-word;
-      }
-    }
 }
