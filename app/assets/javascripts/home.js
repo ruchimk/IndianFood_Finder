@@ -98,8 +98,7 @@ var resultsArray = [];
 var map, activeInfowindow, startLatLng;
 var searchContainer = $("#search-container")[0];
 
-
-//Adding directions to here
+//Adding directions
 var directionsDisplay;
 var directionsService = new google.maps.DirectionsService();
 
@@ -111,17 +110,15 @@ $(document).ready(function() {
     });
 });
 
-//Initialize map centered at SF; taking in lat long entered by user
+//Initialize map centered at browser location; taking in lat long entered by user
 var initialize = function(startingLat, startingLng) {
     directionsDisplay = new google.maps.DirectionsRenderer();
     var mapOptions = {
         center: new google.maps.LatLng(startingLat, startingLng),
-        zoom: 14,
+        zoom: 12,
+
         mapTypeId: google.maps.MapTypeId.ROADMAP,
         styles: appleMapsStyle,
-        // Hide Google map controls
-        panControl: false,
-        streetViewControl: false,
         // Move the zoom controls
         zoomControl: true,
         zoomControlOptions: {
@@ -143,7 +140,6 @@ var initialize = function(startingLat, startingLng) {
         parseResults(data);
     });
      directionsDisplay.setMap(map);
-
 };
 
 function delegateGetDirections() {
@@ -267,7 +263,6 @@ var buildInfoWindow = function(marker, business) {
     var infoWindow = new google.maps.InfoWindow({
         content: buildInfoWindowTemplate(business)
     });
-
     google.maps.event.addListener(marker, 'click', function() {
         if (activeInfowindow) {
             activeInfowindow.close();
@@ -275,7 +270,6 @@ var buildInfoWindow = function(marker, business) {
         infoWindow.open(map, marker);
         activeInfowindow = infoWindow;
     });
-
     return infoWindow;
 }
 
