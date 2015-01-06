@@ -95,20 +95,25 @@ var markersArray = [];
 var resultsArray = [];
 
 //Making map, searchContainer, and activeInfoWindow global
-var map;
+var map, activeInfowindow, startLatLng;
 var searchContainer = $("#search-container")[0];
-var activeInfowindow;
 
+
+//Adding directions to here
+var directionsDisplay;
+var directionsService = new google.maps.DirectionsService();
 
 // Initialize map on load.
 $(document).ready(function() {
     navigator.geolocation.getCurrentPosition(function(position) {
-        initialize(37.7577, -122.4376);
+        startLatLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude)
+        initialize(position.coords.latitude, position.coords.longitude);
     });
 });
 
 //Initialize map centered at SF; taking in lat long entered by user
 var initialize = function(startingLat, startingLng) {
+    directionsDisplay = new google.maps.DirectionsRenderer();
     var mapOptions = {
         center: new google.maps.LatLng(startingLat, startingLng),
         zoom: 14,
@@ -128,6 +133,7 @@ var initialize = function(startingLat, startingLng) {
     // Create a new Google map with the options above.
     map = new google.maps.Map($("#map-canvas")[0], mapOptions);
     bindControls();
+    delegateGetDirections()
 
     // Populate results and map with indian restaurants around user.
     $.get("/search", {
@@ -136,8 +142,32 @@ var initialize = function(startingLat, startingLng) {
     }, function(data) {
         parseResults(data);
     });
+     directionsDisplay.setMap(map);
 
 };
+
+function delegateGetDirections() {
+    $("#map-canvas").on("click", ".getDirections" ,function(){
+        var end = $(this).data('location');
+        var start = $("#startAddress").val()
+        calcRoute(start, end)
+    })
+}
+function calcRoute(start, end) {
+    if(!start) {
+        var start = startLatLng;
+    }
+    var request = {
+            origin:start,
+            destination:end,
+            travelMode: google.maps.TravelMode.DRIVING
+  };
+  directionsService.route(request, function(result, status) {
+    if (status == google.maps.DirectionsStatus.OK) {
+      directionsDisplay.setDirections(result);
+    }
+  });
+}
 
 //Bind event listeners for each search
 //https://developers.google.com/maps/documentation/javascript/examples/
@@ -181,7 +211,6 @@ var getCoordinates = function(data) {
     map.get(geoCoordinates);
     $.get("/search", geoCoordinates, function(data) {
         parseResults(data);
-        console.log(data);
     });
 };
 
@@ -219,8 +248,9 @@ var placeMarkers = function(resultsArray) {
 
             //Create InfoWindow for marker
             var infoWindow = buildInfoWindow(marker, resultsArray[i])
-            resultsArray[i].infoWindow = infoWindow
+
             resultsArray[i].marker = marker
+            resultsArray[i].infoWindow = infoWindow
         }
     }
 };
@@ -230,7 +260,6 @@ var clearMarkers = function() {
     markersArray.forEach(function(marker) {
         marker.setMap(null);
     });
-
     markersArray = [];
 };
 
@@ -240,8 +269,13 @@ var buildInfoWindow = function(marker, business) {
     });
 
     google.maps.event.addListener(marker, 'click', function() {
+        if (activeInfowindow) {
+            activeInfowindow.close();
+        }
         infoWindow.open(map, marker);
+        activeInfowindow = infoWindow;
     });
+
     return infoWindow;
 }
 
@@ -265,7 +299,9 @@ function buildInfoWindowTemplate(business) {
         "<div class='snippet_text'>" + "Rating:" +
         business.rating + "</div><div>" +
         "<img src='" + business.rating_img_url + "'></div><div>"+
-        Number((business.distance * 0.00062).toFixed(2)) +" Miles away" + "</div></div>"
+        Number((business.distance * 0.00062).toFixed(2)) +" Miles away" +
+         "</div><button class='getDirections' data-location='"+business.location.display_address[0] + " "
+         + business.location.display_address[business.location.display_address.length - 1] + "'>Get Directions</button></div>"
 }
 
 function openInfoWindow(index) {
@@ -274,5 +310,5 @@ function openInfoWindow(index) {
     }
     var marker = resultsArray[index].marker;
     activeInfowindow = resultsArray[index].infoWindow;
-    activeInfowindow.open(map, marker)
+    activeInfowindow.open(map, marker);
 }
