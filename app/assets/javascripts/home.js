@@ -119,6 +119,11 @@ var initialize = function(startingLat, startingLng) {
 
         mapTypeId: google.maps.MapTypeId.ROADMAP,
         styles: appleMapsStyle,
+
+        //Hide Google map controls
+        panControl: false,
+        streetViewControl:false,
+
         // Move the zoom controls
         zoomControl: true,
         zoomControlOptions: {
