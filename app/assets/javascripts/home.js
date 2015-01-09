@@ -103,7 +103,7 @@ var directionsDisplay;
 var directionsService = new google.maps.DirectionsService();
 
 // Initialize map on load.
-$(document).ready(function() {
+($(document).ready(function() {
     navigator.geolocation.getCurrentPosition(function(position) {
         startLatLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude)
         initialize(position.coords.latitude, position.coords.longitude);
@@ -111,7 +111,7 @@ $(document).ready(function() {
 });
 
 //Initialize map centered at browser location; taking in lat long entered by user
-var initialize = function(startingLat, startingLng) {
+function initialize(startingLat, startingLng) {
     directionsDisplay = new google.maps.DirectionsRenderer();
     var mapOptions = {
         center: new google.maps.LatLng(startingLat, startingLng),
@@ -172,7 +172,7 @@ function calcRoute(start, end) {
 
 //Bind event listeners for each search
 //https://developers.google.com/maps/documentation/javascript/examples/
-var bindControls = function() {
+function bindControls() {
     var searchContainer = $("#search-container");
     //AddDomListener is creating an event listener on searchContainer object on submit to execute search function
     google.maps.event.addDomListener(searchContainer, "submit", function(event) {
@@ -186,7 +186,7 @@ var bindControls = function() {
     });
 };
 
-var search = function() {
+function search() {
     // Empty the arrays to prepare for new results.
     var searchLocation = $("#map-search input").val();
     clearMarkers();
@@ -207,7 +207,7 @@ var search = function() {
     });
 };
 
-var getCoordinates = function(data) {
+function getCoordinates(data) {
     var geoCoordinates = data.results[0].geometry.location;
     map.get(geoCoordinates);
     $.get("/search", geoCoordinates, function(data) {
@@ -215,7 +215,7 @@ var getCoordinates = function(data) {
     });
 };
 
-var parseResults = function(data) {
+function parseResults(data) {
     for (var i = 0; i < data.businesses.length; i++) {
         var business = data.businesses[i];
         // Construct HTML for each listing and append to the DOM with fade in effect.
@@ -225,7 +225,7 @@ var parseResults = function(data) {
     placeMarkers(resultsArray);
 };
 
-var placeMarkers = function(resultsArray) {
+function placeMarkers(resultsArray) {
     for (var i = 0; i < resultsArray.length; i++) {
         // If there are coordinates in the Yelp data, use those to place a marker on the map.
         //https://github.com/Yelp/yelp-ruby
@@ -257,14 +257,14 @@ var placeMarkers = function(resultsArray) {
 };
 
 //  Remove all markers from map by setting them to null.
-var clearMarkers = function() {
+function clearMarkers() {
     markersArray.forEach(function(marker) {
         marker.setMap(null);
     });
     markersArray = [];
 };
 
-var buildInfoWindow = function(marker, business) {
+function buildInfoWindow (marker, business) {
     var infoWindow = new google.maps.InfoWindow({
         content: buildInfoWindowTemplate(business)
     });
@@ -311,3 +311,8 @@ function openInfoWindow(index) {
     activeInfowindow = resultsArray[index].infoWindow;
     activeInfowindow.open(map, marker);
 }
+
+//Used function expressions instead of function declerations because they
+//are not hoisted and can be handy when errors are thrown.The console will tell you what the function
+// is instead of stating anonymous aka stack trace.
+//http://stackoverflow.com/questions/10081593/are-named-functions-or-anonymous-functions-preferred-in-javascript
