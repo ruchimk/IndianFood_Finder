@@ -103,7 +103,7 @@ var directionsDisplay;
 var directionsService = new google.maps.DirectionsService();
 
 // Initialize map on load.
-($(document).ready(function() {
+$(document).ready(function() {
     navigator.geolocation.getCurrentPosition(function(position) {
         startLatLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude)
         initialize(position.coords.latitude, position.coords.longitude);
