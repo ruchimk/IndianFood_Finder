@@ -9,8 +9,8 @@ Visit [Indian-Food Finder](http://indianfoodfinder.herokuapp.com/)
 ###Technologies used:
 * Ruby 2.1.1 
 * Ruby on Rails 4.1.1
-* jQuery
-* CSS styling
+* JavaScript/jQuery
+* HTML5/CSS3
 * Yelp gem and API
 * Google maps API and Google Geocoder API
 * Figaro to hide environmental variables
