@@ -95,7 +95,7 @@ var markersArray = [];
 var resultsArray = [];
 
 //Making map, searchContainer, and activeInfoWindow global
-var map, activeInfowindow, startLatLng;
+var map, activeInfowindow, startLatLng
 var searchContainer = $("#search-container")[0];
 
 //Adding directions
@@ -138,13 +138,14 @@ function initialize(startingLat, startingLng) {
     delegateGetDirections()
 
     // Populate results and map with indian restaurants around user.
-    $.get("/search", {
+   $.get("/search", {
         lat: startingLat,
-        lng: startingLng
-    }, function(data) {
+        lng: startingLng,
+    },  function(data) {
         parseResults(data);
     });
      directionsDisplay.setMap(map);
+
 };
 
 function delegateGetDirections() {
@@ -311,8 +312,4 @@ function openInfoWindow(index) {
     activeInfowindow = resultsArray[index].infoWindow;
     activeInfowindow.open(map, marker);
 }
-
-//Used function expressions instead of function declerations because they
-//are not hoisted and can be handy when errors are thrown.The console will tell you what the function
-// is instead of stating anonymous aka stack trace.
 //http://stackoverflow.com/questions/10081593/are-named-functions-or-anonymous-functions-preferred-in-javascript
